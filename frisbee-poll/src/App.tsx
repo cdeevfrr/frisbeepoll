@@ -1,13 +1,10 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { CSSProperties } from 'react';
 import { PollResponses } from './Components/PollResponses';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+    <div style={{textAlign: 'center'}}>
+      <header style={styles.appHeader}>
         <PollResponses/>
       </header>
     </div>
@@ -15,3 +12,15 @@ function App() {
 }
 
 export default App;
+
+const styles: {[key: string]: CSSProperties} = {
+  appHeader: {
+    backgroundColor: '#282c34',
+    minHeight: '100vh',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    color: 'white',
+  }
+}
