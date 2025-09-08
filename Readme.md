@@ -59,14 +59,65 @@ Wipes the current poll and makes a new one.
 
 ## Deploys
 
+### Client side website
+
 The client side is a react app hosted by github pages, deploy with 
 ```
 cd frisbee-poll
 npm run deploy
 ```
 
+### Backend datastore / Server
+
+The datastore is this [google sheet](https://docs.google.com/spreadsheets/d/1C3eWxsOnYxwh7xr7I0vuOykd8_ONUQ6lZApSohTSJ84). Edit the app script (go to sheet -> extensions tab -> click "apps script") and then copy-paste SheetScript/script.js code into it. Click "deploy" at the top right and make sure it succeeds, with web app URL still "https://script.google.com/macros/s/AKfycbzzWSfaZ_B7cTClelRACQSpdlL8KXiisBERPwGavoUJLp18sG0SJrAMfsU4oFEGZqRLAA/exec"
 
 
+# Testing
 
+## Backend
 
+Some test curls you can make to ensure it's working (pull up the [sheet](https://docs.google.com/spreadsheets/d/1C3eWxsOnYxwh7xr7I0vuOykd8_ONUQ6lZApSohTSJ84/) while doing these):
+
+- Make/refresh the test poll: (TODO: Behavior is good, response is buggy)
+```
+curl -L -X POST \
+  -H "Content-Type: application/json" \
+  -d '"TestPoll"' \
+  "https://script.google.com/macros/s/AKfycbylpnPSTkSud1nAMM4Uju39-fpalnYIOf6Hsfi7bXdphaAK_YwrtgBhHksTpPhlBRa2uQ/exec?action=postPoll"
+```
+
+- Add a response to the test poll: (TODO: Behavior is good, response is buggy)
+
+```
+curl -L -X POST \
+  -H "Content-Type: application/json" \
+  -d '{
+    "userName": "Danny",
+    "sourceID": "abc123",
+    "pollId": "TestPoll",
+    "responseDetails": {
+      "willComeIfAtLeast": 6,
+      "willBring": 1,
+      "weather": 40
+    }
+  }' \
+  "https://script.google.com/macros/s/AKfycbylpnPSTkSud1nAMM4Uju39-fpalnYIOf6Hsfi7bXdphaAK_YwrtgBhHksTpPhlBRa2uQ/exec?action=putPollResponse"
+```
+
+- Get all poll responses
+```
+curl -L "https://script.google.com/macros/s/AKfycbylpnPSTkSud1nAMM4Uju39-fpalnYIOf6Hsfi7bXdphaAK_YwrtgBhHksTpPhlBRa2uQ/exec?action=getPollResponses"
+```
+
+- Delete the test poll response (TODO: Behavior is good, response is buggy)
+```
+curl -L -X POST \
+  -H "Content-Type: application/json" \
+  -d '{
+    "userName": "Danny",
+    "sourceID": "abc123",
+    "pollId": "TestPoll"
+  }' \
+  "https://script.google.com/macros/s/AKfycbylpnPSTkSud1nAMM4Uju39-fpalnYIOf6Hsfi7bXdphaAK_YwrtgBhHksTpPhlBRa2uQ/exec?action=deletePollResponse"
+```
 
