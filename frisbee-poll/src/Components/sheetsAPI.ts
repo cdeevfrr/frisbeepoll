@@ -42,3 +42,47 @@ export async function loadPollResponses(
     setLoadingPollResponses(false)
 }
 
+export async function submitResponse({
+    sourceID,
+    response,
+}:{
+    sourceID: string,
+    response: PollResponse
+}): Promise<any> {
+    const params = new URLSearchParams({action: "putPollResponse"})
+    const url = new URL("https://script.google.com/macros/s/AKfycbylpnPSTkSud1nAMM4Uju39-fpalnYIOf6Hsfi7bXdphaAK_YwrtgBhHksTpPhlBRa2uQ/exec")
+    url.search = params.toString()
+
+    const payload = {
+        userName: response.userName,
+        sourceID, // TODO remove. Not going to be used.
+        pollId: "TestPoll", // TODO remove. 
+        // We want to change the API here so you don't have to specify a 
+        // pollID when submitting a response - it just goes to the latest poll by default.
+        responseDetails: {
+            willComeIfAtLeast: response.willComeIfAtLeast,
+            willBring: response.willBring,
+            weather: response.weather,
+        },
+    }
+
+    const resp = await fetch(url, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(payload),
+    })
+
+    // Unfortunately, the sheets API I built isn't returning responses right, even when
+    // the update worked on the sheet.
+    //
+    // I'm just letting the client side discover success by re-polling 
+    // for all responses.
+    // 
+    // if (!resp.ok) {
+    //     throw new Error(`Failed to submit response: ${resp.status} ${resp.statusText}`)
+    // }
+
+    // const body = await resp.json()
+    // return body
+}
+

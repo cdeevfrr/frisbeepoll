@@ -3,7 +3,7 @@ import { PollResponses } from './Components/PollResponses';
 import { NameEntry } from './Components/NameEntry';
 import Cookies from 'js-cookie';
 import { ResponseDetails } from './Components/ResponseDetails';
-import { loadPollResponses, PollResponse } from './Components/sheetsAPI';
+import { loadPollResponses, PollResponse, submitResponse } from './Components/sheetsAPI';
 
 export interface PendingResponseDetails {
   willComeIfAtLeast: number,
@@ -37,7 +37,7 @@ function App() {
     if (foundResponse){
       setSubmittedResponse(foundResponse)
     }
-  }, pollResponses)
+  }, [pollResponses])
 
   return (
     <div style={{textAlign: 'center'}}>
@@ -63,19 +63,25 @@ function App() {
             pending={pendingResponseDetails}
             onChangePending={setPendingResponseDetails}
             submitted={submittedResponse}
-            onSubmit={async () => {
-              // TODO: send to backend (make sure to await, so the load will see our edits)
-              setSubmittedResponse({
-                userName: userName,
-                weather: pendingResponseDetails.weather,
-                willBring: pendingResponseDetails.willBring,
-                willComeIfAtLeast: pendingResponseDetails.willComeIfAtLeast
-              })
-              // This re-load will trigger another setSubmittedResponse because of 
+            onSubmit={async () => {        
+              await submitResponse({
+                response: { 
+                  userName: userName,
+                  weather: pendingResponseDetails.weather,
+                  willBring: pendingResponseDetails.willBring,
+                  willComeIfAtLeast: pendingResponseDetails.willComeIfAtLeast,
+                },
+                sourceID: "Unused",
+              })      
+              // This re-load will trigger setSubmittedResponse because of 
               // the useEffect watching for changes in pollResponses.
-              // That's ok.
+              // We DO NOT want to trigger this before the load, because
+              // right now the change in submittedResponse is the only way
+              // the user can see that their response actually got there.
+              // It's possible to make both states obvious to the user 
+              // (submitted & polling; polled & saw your response)
+              // but for now we're skipping the polling state.
               await loadPollResponses(setPollResponses, setLoadingPollResponses);
-              
             }}
           />
         )}
