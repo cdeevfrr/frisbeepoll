@@ -27,7 +27,7 @@ export function NameEntry({
         value={nameValue}
         onChange={(e) => setNameValue(e.target.value)}
       />
-      <button type="submit">Submit</button>
+      <button type="submit">Done</button>
     </form>
 
 

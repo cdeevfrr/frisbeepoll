@@ -40,50 +40,49 @@ function App() {
   }, [pollResponses])
 
   return (
-    <div style={{textAlign: 'center'}}>
+    <div style={styles.app}>
       <header style={styles.appHeader}>
+        <div style={styles.headerTop}>
           <PollResponses pollResponses={pollResponses}/>
           <button 
             onClick={() => loadPollResponses(setPollResponses, setLoadingPollResponses)}
             disabled={loadingPollResponses}
-          >Refresh</button>
-          <NameEntry 
+            style={styles.button}
+          >
+            {loadingPollResponses ? "Refreshing…" : "Refresh"}
+          </button>
+        </div>
+        <NameEntry 
           setNameCallback={async (name)=>{
             Cookies.set("userName", name, {expires: 180})
             setUserName(name)
           }} 
           existingName={userName}
-          />
+        />
       </header>
 
       <main style={styles.pageContainer}>
         {userName && (
-          <ResponseDetails
-            userName={userName}
-            pending={pendingResponseDetails}
-            onChangePending={setPendingResponseDetails}
-            submitted={submittedResponse}
-            onSubmit={async () => {        
-              await submitResponse({
-                response: { 
-                  userName: userName,
-                  weather: pendingResponseDetails.weather,
-                  willBring: pendingResponseDetails.willBring,
-                  willComeIfAtLeast: pendingResponseDetails.willComeIfAtLeast,
-                },
-                sourceID: "Unused",
-              })      
-              // This re-load will trigger setSubmittedResponse because of 
-              // the useEffect watching for changes in pollResponses.
-              // We DO NOT want to trigger this before the load, because
-              // right now the change in submittedResponse is the only way
-              // the user can see that their response actually got there.
-              // It's possible to make both states obvious to the user 
-              // (submitted & polling; polled & saw your response)
-              // but for now we're skipping the polling state.
-              await loadPollResponses(setPollResponses, setLoadingPollResponses);
-            }}
-          />
+          <div style={styles.card}>
+            <ResponseDetails
+              userName={userName}
+              pending={pendingResponseDetails}
+              onChangePending={setPendingResponseDetails}
+              submitted={submittedResponse}
+              onSubmit={async () => {        
+                await submitResponse({
+                  response: { 
+                    userName: userName,
+                    weather: pendingResponseDetails.weather,
+                    willBring: pendingResponseDetails.willBring,
+                    willComeIfAtLeast: pendingResponseDetails.willComeIfAtLeast,
+                  },
+                  sourceID: "Unused",
+                })      
+                await loadPollResponses(setPollResponses, setLoadingPollResponses);
+              }}
+            />
+          </div>
         )}
       </main>
     </div>
@@ -93,16 +92,53 @@ function App() {
 export default App;
 
 const styles: {[key: string]: CSSProperties} = {
-  appHeader: {
-    backgroundColor: '#282c34',
-    minHeight: '10vh',
+  app: {
+    fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+    backgroundColor: '#f7f8fa',
+    minHeight: '100vh',
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
+  },
+  appHeader: {
+    backgroundColor: '#1f2937',
     color: 'white',
+    padding: '1rem',
+    textAlign: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '0.5rem',
+  },
+  headerTop: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    maxWidth: '600px',
+    margin: '0 auto',
+    width: '100%',
   },
   pageContainer: {
-    marginTop: '2rem',
+    flex: 1,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
+    padding: '2rem 1rem',
+  },
+  card: {
+    backgroundColor: 'white',
+    borderRadius: '12px',
+    padding: '2rem',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+    width: '100%',
+    maxWidth: '500px',
+  },
+  button: {
+    backgroundColor: '#2563eb',
+    border: 'none',
+    padding: '0.5rem 1rem',
+    borderRadius: '8px',
+    color: 'white',
+    fontSize: '0.9rem',
+    cursor: 'pointer',
+    transition: 'background-color 0.2s ease',
   }
 };
