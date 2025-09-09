@@ -171,39 +171,19 @@ function getCurrentPollSheet() {
 // === Helpers ===
 
 function jsonResponse(obj) {
-  return setCorsHeaders(ContentService
+  return ContentService
     .createTextOutput(JSON.stringify(obj))
-    .setMimeType(ContentService.MimeType.JSON));
+    .setMimeType(ContentService.MimeType.JSON);
 }
 
 function badRequest(msg) {
-  return setCorsHeaders(ContentService
+  return ContentService
     .createTextOutput(JSON.stringify({ error: msg }))
-    .setMimeType(ContentService.MimeType.JSON));
+    .setMimeType(ContentService.MimeType.JSON);
 }
 
 function serverError(err) {
-  return setCorsHeaders(ContentService
+  return ContentService
     .createTextOutput(JSON.stringify({ error: err.message }))
-    .setMimeType(ContentService.MimeType.JSON));
-}
-
-
-/**
- * Wraps a content service output with CORS headers
- */
-function setCorsHeaders(output) {
-  const allowedOrigins = [
-    "http://localhost:3000", // for local host
-    "https://cdeevfrr.github.io" // for production
-  ];
-  const origin = e?.parameter?.origin || ""; // fallback if apps script doesn't provide us the origin.
-  
-  // Default to GitHub pages domain if origin isn't passed
-  const chosenOrigin = allowedOrigins.includes(origin) ? origin : "https://cdeevfrr.github.io";
-
-  return output
-    .setHeader("Access-Control-Allow-Origin", chosenOrigin)
-    .setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
-    .setHeader("Access-Control-Allow-Headers", "Content-Type");
+    .setMimeType(ContentService.MimeType.JSON);
 }
