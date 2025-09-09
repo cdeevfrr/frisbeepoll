@@ -7,7 +7,7 @@ import { loadPollResponses, PollResponse, submitResponse } from './Components/sh
 
 export interface PendingResponseDetails {
   willComeIfAtLeast: number,
-  willBring: number,
+  extras: number,
   weather: number, // percentage indicating the highest chance of rain where you'll still come
 }
 
@@ -19,7 +19,7 @@ function App() {
   // local draft of response (editing mode)
   const [pendingResponseDetails, setPendingResponseDetails] = useState<PendingResponseDetails>({
     willComeIfAtLeast: 0,
-    willBring: 1,
+    extras: 1,
     weather: 50,
   });
 
@@ -74,7 +74,7 @@ function App() {
                   response: { 
                     userName: userName,
                     weather: pendingResponseDetails.weather,
-                    willBring: pendingResponseDetails.willBring,
+                    willBring: pendingResponseDetails.extras + 1,
                     willComeIfAtLeast: pendingResponseDetails.willComeIfAtLeast,
                   },
                   sourceID: "Unused",
