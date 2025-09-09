@@ -86,7 +86,7 @@ curl -L -X POST \
   "https://script.google.com/macros/s/AKfycbw5SbH69fGoYclgyZa7yIeMY-Kbvw9wonzvDq9GE7yB9FNRUGvcVrxRuvatFeoDWoZpuw/exec?action=postPoll"
 ```
 
-- Add a response to the test poll: (TODO: Behavior is good, response is buggy)
+- Add a response to the test poll: (TODO: Behavior is good, response is buggy when using CURL but works in client.)
 
 ```
 curl -L -X POST \

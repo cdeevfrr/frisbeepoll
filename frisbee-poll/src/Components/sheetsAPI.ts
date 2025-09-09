@@ -70,21 +70,16 @@ export async function submitResponse({
 
     const resp = await fetch(url, {
         method: "POST",
-        headers: {"Content-Type": "application/json"},
+        headers: {"Content-Type": "text/plain;charset=utf-8"}, // Use this content type to avoid CORS preflight requests.
         body: JSON.stringify(payload),
     })
 
-    // Unfortunately, the sheets API I built isn't returning responses right, even when
-    // the update worked on the sheet.
-    //
-    // I'm just letting the client side discover success by re-polling 
-    // for all responses.
-    // 
-    // if (!resp.ok) {
-    //     throw new Error(`Failed to submit response: ${resp.status} ${resp.statusText}`)
-    // }
+    if (!resp.ok) {
+        throw new Error(`Failed to submit response: ${resp.status} ${resp.statusText}`)
+    }
 
-    // const body = await resp.json()
-    // return body
+    const body = await resp.json()
+    console.log("I got body " + JSON.stringify(body))
+    return body
 }
 
