@@ -23,11 +23,7 @@ const baseURL = "https://script.google.com/macros/s/AKfycbw5SbH69fGoYclgyZa7yIeM
 //        "weather":40,
 //        "timestamp":"2025-09-08T19:30:50.539Z"
 //  }]}
-export async function loadPollResponses(
-        setPollResponsesCallback: (responses: Array<PollResponse>) => void, 
-        setLoadingPollResponses: (b: boolean) => void
-) {
-    setLoadingPollResponses(true)
+export async function loadPollResponses(): Promise<Array<PollResponse> | null>{
     const params = new URLSearchParams({action: "getPollResponses"})
     const url = new URL(baseURL)
     url.search = params.toString()
@@ -39,9 +35,9 @@ export async function loadPollResponses(
     // TODO: Actually verify shape of body, throw errors if bad.
     // This is just a stand-in.
     if (body.responses.length > 0 && body.responses[0]){
-        setPollResponsesCallback(body.responses)
+        return body.responses
     }
-    setLoadingPollResponses(false)
+    return null
 }
 
 export async function submitResponse({
@@ -79,7 +75,6 @@ export async function submitResponse({
     }
 
     const body = await resp.json()
-    console.log("I got body " + JSON.stringify(body))
     return body
 }
 

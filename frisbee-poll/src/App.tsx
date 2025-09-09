@@ -19,7 +19,7 @@ function App() {
   // local draft of response (editing mode)
   const [pendingResponseDetails, setPendingResponseDetails] = useState<PendingResponseDetails>({
     willComeIfAtLeast: 0,
-    extras: 1,
+    extras: 0,
     weather: 50,
   });
 
@@ -28,16 +28,8 @@ function App() {
 
   // On first render, load poll responses.
   useEffect(() => {
-    loadPollResponses(setPollResponses, setLoadingPollResponses);
+    reloadPollResponses({setPollResponses, setLoadingPollResponses, setSubmittedResponse, userName});
   }, []);
-
-  // When poll responses changes, update submitted response.
-  useEffect(() => {
-    const foundResponse = pollResponses.find(response => response.userName === userName)
-    if (foundResponse){
-      setSubmittedResponse(foundResponse)
-    }
-  }, [pollResponses])
 
   return (
     <div style={styles.app}>
@@ -45,7 +37,7 @@ function App() {
         <div style={styles.headerTop}>
           <PollResponses pollResponses={pollResponses}/>
           <button 
-            onClick={() => loadPollResponses(setPollResponses, setLoadingPollResponses)}
+            onClick={() => reloadPollResponses({setPollResponses, setLoadingPollResponses, setSubmittedResponse, userName})}
             disabled={loadingPollResponses}
             style={styles.button}
           >
@@ -55,7 +47,9 @@ function App() {
         <NameEntry 
           setNameCallback={async (name)=>{
             Cookies.set("userName", name, {expires: 180})
+            setSubmittedResponse(undefined)
             setUserName(name)
+            await reloadPollResponses({setPollResponses, setLoadingPollResponses, setSubmittedResponse, userName: name})
           }} 
           existingName={userName}
         />
@@ -64,12 +58,13 @@ function App() {
       <main style={styles.pageContainer}>
         {userName && (
           <div style={styles.card}>
-            <ResponseDetails
+            {!loadingPollResponses && <ResponseDetails
               userName={userName}
               pending={pendingResponseDetails}
               onChangePending={setPendingResponseDetails}
               submitted={submittedResponse}
-              onSubmit={async () => {        
+              onSubmit={async () => {  
+                setLoadingPollResponses(true)      
                 await submitResponse({
                   response: { 
                     userName: userName,
@@ -79,14 +74,45 @@ function App() {
                   },
                   sourceID: "Unused",
                 })      
-                await loadPollResponses(setPollResponses, setLoadingPollResponses);
+                // This will eventually set loadingPollResponses(false)
+                await reloadPollResponses({setPollResponses, setLoadingPollResponses, setSubmittedResponse, userName});
               }}
-            />
+            />}
           </div>
         )}
       </main>
     </div>
   );
+}
+
+async function reloadPollResponses ({
+  setPollResponses, 
+  setLoadingPollResponses, 
+  setSubmittedResponse, 
+  userName
+}: {
+  setPollResponses: (responses: Array<PollResponse>) => void, 
+  setLoadingPollResponses: (b: boolean) => void, 
+  setSubmittedResponse: (response: PollResponse) => void, 
+  userName: string | undefined,
+}) {
+  setLoadingPollResponses(true)
+  const responses = await loadPollResponses()
+  
+  if (!responses){
+    setLoadingPollResponses(false)
+    return
+  }
+
+  setPollResponses(responses)
+
+  const foundResponse = responses.find(response => response.userName === userName)
+    if (foundResponse){
+    setSubmittedResponse(foundResponse)
+  }
+
+  setLoadingPollResponses(false)
+
 }
 
 export default App;
