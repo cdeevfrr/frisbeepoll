@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { PendingResponseDetails } from "../App";
-import { PollResponse } from "./DataLoading";
+import { PollResponse } from "./sheetsAPI";
 
 export function ResponseDetails({
     userName,

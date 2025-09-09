@@ -2,26 +2,8 @@ import React, { CSSProperties, useEffect, useState } from 'react';
 import { PollResponses } from './Components/PollResponses';
 import { NameEntry } from './Components/NameEntry';
 import Cookies from 'js-cookie';
-import { loadPollResponses, PollResponse } from './Components/DataLoading';
 import { ResponseDetails } from './Components/ResponseDetails';
-
-// TODO NEXT
-// - I need to make a response flow.
-//
-//  Page 1:
-//    Floating header shows who's there
-//    Name needs to fill in
-//       "What do we call you on the field?"
-//  
-//  Page 2:
-//    Same floating header
-//    Shows sane defaults for all the responses
-//    Submit button. 
-//
-//  Page 3:
-//    Same floating header
-//    _name_, you've responded with ___
-//    Button at the bottom to make a new response (takes you to page 2 state)
+import { loadPollResponses, PollResponse } from './Components/sheetsAPI';
 
 export interface PendingResponseDetails {
   willComeIfAtLeast: number,

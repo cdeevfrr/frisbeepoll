@@ -1,5 +1,3 @@
-// TODO: Rename this file "Backend" or "DAO" or something.
-
 export interface PollResponse {
     userName: string,
     willComeIfAtLeast: number,
@@ -8,7 +6,6 @@ export interface PollResponse {
 }
 
 // - I need to update the backend to key off name not name,ID.
-
 
 
 // Example response can be acquired from top level Readme testing commands for backend.
@@ -44,3 +41,4 @@ export async function loadPollResponses(
     }
     setLoadingPollResponses(false)
 }
+
