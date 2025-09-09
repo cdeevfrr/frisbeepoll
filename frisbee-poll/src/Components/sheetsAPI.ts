@@ -5,6 +5,8 @@ export interface PollResponse {
     weather: number,
 }
 
+const baseURL = "https://script.google.com/macros/s/AKfycbw5SbH69fGoYclgyZa7yIeMY-Kbvw9wonzvDq9GE7yB9FNRUGvcVrxRuvatFeoDWoZpuw/exec"
+
 // - I need to update the backend to key off name not name,ID.
 
 
@@ -27,7 +29,7 @@ export async function loadPollResponses(
 ) {
     setLoadingPollResponses(true)
     const params = new URLSearchParams({action: "getPollResponses"})
-    const url = new URL("https://script.google.com/macros/s/AKfycbylpnPSTkSud1nAMM4Uju39-fpalnYIOf6Hsfi7bXdphaAK_YwrtgBhHksTpPhlBRa2uQ/exec")
+    const url = new URL(baseURL)
     url.search = params.toString()
 
     const response = await fetch(url)
@@ -50,7 +52,7 @@ export async function submitResponse({
     response: PollResponse
 }): Promise<any> {
     const params = new URLSearchParams({action: "putPollResponse"})
-    const url = new URL("https://script.google.com/macros/s/AKfycbylpnPSTkSud1nAMM4Uju39-fpalnYIOf6Hsfi7bXdphaAK_YwrtgBhHksTpPhlBRa2uQ/exec")
+    const url = new URL(baseURL)
     url.search = params.toString()
 
     const payload = {
