@@ -2,6 +2,8 @@ import { useState } from "react";
 import { PendingResponseDetails } from "../App";
 import { PollResponse } from "./sheetsAPI";
 
+const weatherff = false
+
 export function ResponseDetails({
     userName,
     pending,
@@ -29,9 +31,9 @@ export function ResponseDetails({
               : `${submitted.willComeIfAtLeast} people are going`}
           </li>
           <li>I’ll bring {submitted.willBring - 1} extra players</li>
-          <li>
+          {weatherff && <li>
             I’ll still come with up to {submitted.weather}% chance of rain
-          </li>
+          </li>}
         </ul>
         <button onClick={() => setEditMode(true)}>Change my response</button>
       </div>
@@ -81,9 +83,9 @@ export function ResponseDetails({
         extra people
       </label>
 
-      <br />
+      {weatherff && <br />}
 
-      <label>
+      {weatherff && <label>
         I’ll still come if rain chance is up to{" "}
         <input
           type="range"
@@ -98,7 +100,7 @@ export function ResponseDetails({
           }
         />{" "}
         {pending.weather}%
-      </label>
+      </label>}
 
       <br />
 
