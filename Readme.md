@@ -83,10 +83,10 @@ Some test curls you can make to ensure it's working (pull up the [sheet](https:/
 curl -L -X POST \
   -H "Content-Type: application/json" \
   -d '"TestPoll"' \
-  "https://script.google.com/macros/s/AKfycbylpnPSTkSud1nAMM4Uju39-fpalnYIOf6Hsfi7bXdphaAK_YwrtgBhHksTpPhlBRa2uQ/exec?action=postPoll"
+  "https://script.google.com/macros/s/AKfycbw5SbH69fGoYclgyZa7yIeMY-Kbvw9wonzvDq9GE7yB9FNRUGvcVrxRuvatFeoDWoZpuw/exec?action=postPoll"
 ```
 
-- Add a response to the test poll: (TODO: Behavior is good, response is buggy)
+- Add a response to the test poll: (TODO: Behavior is good, response is buggy when using CURL but works in client.)
 
 ```
 curl -L -X POST \
@@ -101,12 +101,12 @@ curl -L -X POST \
       "weather": 40
     }
   }' \
-  "https://script.google.com/macros/s/AKfycbylpnPSTkSud1nAMM4Uju39-fpalnYIOf6Hsfi7bXdphaAK_YwrtgBhHksTpPhlBRa2uQ/exec?action=putPollResponse"
+  "https://script.google.com/macros/s/AKfycbw5SbH69fGoYclgyZa7yIeMY-Kbvw9wonzvDq9GE7yB9FNRUGvcVrxRuvatFeoDWoZpuw/exec?action=putPollResponse"
 ```
 
-- Get all poll responses
+- Get all poll responses for the current poll
 ```
-curl -L "https://script.google.com/macros/s/AKfycbylpnPSTkSud1nAMM4Uju39-fpalnYIOf6Hsfi7bXdphaAK_YwrtgBhHksTpPhlBRa2uQ/exec?action=getPollResponses"
+curl -L "https://script.google.com/macros/s/AKfycbw5SbH69fGoYclgyZa7yIeMY-Kbvw9wonzvDq9GE7yB9FNRUGvcVrxRuvatFeoDWoZpuw/exec?action=getPollResponses"
 ```
 
 - Delete the test poll response (TODO: Behavior is good, response is buggy)
@@ -118,6 +118,6 @@ curl -L -X POST \
     "sourceID": "abc123",
     "pollId": "TestPoll"
   }' \
-  "https://script.google.com/macros/s/AKfycbylpnPSTkSud1nAMM4Uju39-fpalnYIOf6Hsfi7bXdphaAK_YwrtgBhHksTpPhlBRa2uQ/exec?action=deletePollResponse"
+  "https://script.google.com/macros/s/AKfycbw5SbH69fGoYclgyZa7yIeMY-Kbvw9wonzvDq9GE7yB9FNRUGvcVrxRuvatFeoDWoZpuw/exec?action=deletePollResponse"
 ```
 
