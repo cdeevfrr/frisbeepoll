@@ -94,11 +94,11 @@ function putPollResponse(response) {
 
   const data = sheet.getDataRange().getValues();
   const headers = data.shift();
-  const sourceIdIndex = headers.indexOf("sourceID");
+  const userNameIndex = headers.indexOf("userName");
 
-  // Remove old rows with same sourceID
+  // Remove old rows with same user name
   for (let i = data.length - 1; i >= 0; i--) {
-    if (data[i][sourceIdIndex] === response.sourceID) {
+    if (data[i][userNameIndex] === response.userName) {
       sheet.deleteRow(i + 2); // +2 = 1 header + 1-based index
     }
   }
@@ -106,7 +106,6 @@ function putPollResponse(response) {
   // Insert new row
   const row = [
     response.userName,
-    response.sourceID,
     response.pollId,
     response.responseDetails.willComeIfAtLeast,
     response.responseDetails.willBring,
@@ -144,7 +143,6 @@ function createPoll(pollName) {
   // Initialize headers
   sheet.appendRow([
     "userName",
-    "sourceID",
     "pollId",
     "willComeIfAtLeast",
     "willBring",

@@ -69,7 +69,12 @@ npm run deploy
 
 ### Backend datastore / Server
 
-The datastore is this [google sheet](https://docs.google.com/spreadsheets/d/1C3eWxsOnYxwh7xr7I0vuOykd8_ONUQ6lZApSohTSJ84). Edit the app script (go to sheet -> extensions tab -> click "apps script") and then copy-paste SheetScript/script.js code into it. Click "deploy" at the top right and make sure it succeeds, with web app URL still "https://script.google.com/macros/s/AKfycbzzWSfaZ_B7cTClelRACQSpdlL8KXiisBERPwGavoUJLp18sG0SJrAMfsU4oFEGZqRLAA/exec"
+The datastore is this [google sheet](https://docs.google.com/spreadsheets/d/1C3eWxsOnYxwh7xr7I0vuOykd8_ONUQ6lZApSohTSJ84). 
+- Edit the app script (go to sheet -> extensions tab -> click "apps script") and then copy-paste SheetScript/script.js code into it, and save. 
+- Click "deploy" at the top right, "manage deployments" (you don't want to make a new one) 
+- Click the active deployment; the little pencil to edit; and then change the version to "new version".
+- Deploy 
+- You can see the "Testing" section below to see how to make sure it worked with CURL. 
 
 
 # Testing
