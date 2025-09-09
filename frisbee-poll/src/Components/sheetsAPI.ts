@@ -2,7 +2,10 @@ export interface PollResponse {
     userName: string,
     willComeIfAtLeast: number,
     willBring: number,
+    weather: number,
 }
+
+// - I need to update the backend to key off name not name,ID.
 
 
 // Example response can be acquired from top level Readme testing commands for backend.
@@ -38,3 +41,4 @@ export async function loadPollResponses(
     }
     setLoadingPollResponses(false)
 }
+

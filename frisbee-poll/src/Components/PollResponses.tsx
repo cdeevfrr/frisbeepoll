@@ -5,7 +5,8 @@
  * Users can also refresh the data (re-loading from server).
  */
 
-import { PollResponse } from "./DataLoading";
+import { PollResponse } from "./sheetsAPI";
+
 
 export function PollResponses({pollResponses}: {pollResponses: Array<PollResponse>}){
     return <div>
