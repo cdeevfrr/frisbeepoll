@@ -1,16 +1,15 @@
 {
   "files": {
-    "main.css": "/frisbeepoll/static/css/main.fe3dc31c.css",
-    "main.js": "/frisbeepoll/static/js/main.081d34ef.js",
+    "main.css": "/frisbeepoll/static/css/main.e6c13ad2.css",
+    "main.js": "/frisbeepoll/static/js/main.8dbc71ca.js",
     "static/js/453.cb33ad2a.chunk.js": "/frisbeepoll/static/js/453.cb33ad2a.chunk.js",
-    "static/media/logo.svg": "/frisbeepoll/static/media/logo.6ce24c58023cc2f8fd88fe9d219db6c6.svg",
     "index.html": "/frisbeepoll/index.html",
-    "main.fe3dc31c.css.map": "/frisbeepoll/static/css/main.fe3dc31c.css.map",
-    "main.081d34ef.js.map": "/frisbeepoll/static/js/main.081d34ef.js.map",
+    "main.e6c13ad2.css.map": "/frisbeepoll/static/css/main.e6c13ad2.css.map",
+    "main.8dbc71ca.js.map": "/frisbeepoll/static/js/main.8dbc71ca.js.map",
     "453.cb33ad2a.chunk.js.map": "/frisbeepoll/static/js/453.cb33ad2a.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.fe3dc31c.css",
-    "static/js/main.081d34ef.js"
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.8dbc71ca.js"
   ]
 }
