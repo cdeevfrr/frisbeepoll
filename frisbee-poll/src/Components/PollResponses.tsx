@@ -14,13 +14,14 @@ export function PollResponses({pollResponses}: {pollResponses: Array<PollRespons
     const joining = pollResponses.filter(x => playerAnnotations[x.userName])
     const waiting = pollResponses.filter(x => !playerAnnotations[x.userName])
 
+    // Below is mostly chatGPT generated. 
     return (
     <div style={styles.container}>
       {/* Joining players */}
       <div style={styles.groupRow}>
         {joining.map((p) => (
           <div key={p.userName} style={styles.playerBox}>
-            <span style={styles.joiningName}>{p.userName}</span>
+            <span style={styles.joiningName}>{renderName(p, styles.joiningName)}</span>
             <div style={{ ...styles.iconCircle, ...styles.joiningCircle }}>🥏</div>
           </div>
         ))}
@@ -29,13 +30,12 @@ export function PollResponses({pollResponses}: {pollResponses: Array<PollRespons
       {/* Waiting players */}
       <div style={styles.groupRow}>
         {waiting.map((p) => {
-          const countNeeded = Math.max(0, p.willComeIfAtLeast - joining.length);
           return (
             <div key={p.userName} style={styles.playerBox}>
               <span style={styles.countNeeded}>
-                Needs {countNeeded} more
+                Joins at {p.willComeIfAtLeast} players
               </span>
-              <span style={styles.waitingName}>{p.userName}</span>
+              <span style={styles.waitingName}>{renderName(p, styles.joiningName)}</span>
               <div style={{ ...styles.iconCircle, ...styles.waitingCircle }}>🤔</div>
             </div>
           );
@@ -44,6 +44,15 @@ export function PollResponses({pollResponses}: {pollResponses: Array<PollRespons
     </div>
   );
 }
+
+function renderName(p: PollResponse, style: CSSProperties) {
+    return (
+      <span style={style}>
+        {p.userName}
+        {p.willBring > 1 ? ` +${p.willBring - 1}` : ""}
+      </span>
+    );
+  }
 
 const styles: { [key: string]: CSSProperties } = {
   container: {
