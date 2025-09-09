@@ -66,13 +66,6 @@ function doPost(e) {
   }
 }
 
-/**
- * Handle preflight OPTIONS for CORS
- */
-function doOptions(e) {
-  return sendCors_(ContentService.createTextOutput(""));
-}
-
 
 // === Core functions ===
 
