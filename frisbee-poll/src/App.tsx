@@ -5,6 +5,29 @@ import Cookies from 'js-cookie';
 import { ResponseFlow } from './Components/ResponseFlow';
 import { loadPollResponses, PollResponse } from './Components/DataLoading';
 
+// TODO NEXT
+// - I need to make a response flow.
+//
+//  Page 1:
+//    Floating header shows who's there
+//    Name needs to fill in
+//       "What do we call you on the field?"
+//  
+//  Page 2:
+//    Same floating header
+//    Shows sane defaults for all the responses
+//    Submit button. 
+//
+//  Page 3:
+//    Same floating header
+//    _name_, you've responded with ___
+//    Button at the bottom to make a new response (takes you to page 2 state)
+
+interface PendingResponseDetails {
+  willComeIfAtLeast: number,
+  willBring: number,
+  weather: number, // percentage indicating the highest chance of rain where you'll still come
+}
 
 function App() {
   const [userName, setUserName] = useState<string | undefined>(Cookies.get("userName"));
@@ -15,6 +38,12 @@ function App() {
       useEffect(() => {
           loadPollResponses(setPollResponses, setLoadingPollResponses)
       }, [])
+
+  const [pendingResponseDetails, setPendingResponseDetails] = useState<PendingResponseDetails>({
+    willComeIfAtLeast: 0,
+    willBring: 1,
+    weather: 1,
+  })
 
   return (
     <div style={{textAlign: 'center'}}>
