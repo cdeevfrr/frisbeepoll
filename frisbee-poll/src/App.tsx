@@ -2,8 +2,8 @@ import React, { CSSProperties, useEffect, useState } from 'react';
 import { PollResponses } from './Components/PollResponses';
 import { NameEntry } from './Components/NameEntry';
 import Cookies from 'js-cookie';
-import { ResponseFlow } from './Components/ResponseFlow';
 import { loadPollResponses, PollResponse } from './Components/DataLoading';
+import { ResponseDetails } from './Components/ResponseDetails';
 
 // TODO NEXT
 // - I need to make a response flow.
@@ -23,7 +23,7 @@ import { loadPollResponses, PollResponse } from './Components/DataLoading';
 //    _name_, you've responded with ___
 //    Button at the bottom to make a new response (takes you to page 2 state)
 
-interface PendingResponseDetails {
+export interface PendingResponseDetails {
   willComeIfAtLeast: number,
   willBring: number,
   weather: number, // percentage indicating the highest chance of rain where you'll still come
@@ -31,19 +31,31 @@ interface PendingResponseDetails {
 
 function App() {
   const [userName, setUserName] = useState<string | undefined>(Cookies.get("userName"));
-
   const [pollResponses, setPollResponses] = useState<Array<PollResponse>>([]);
-      const [loadingPollResponses, setLoadingPollResponses] = useState(false)
-  
-      useEffect(() => {
-          loadPollResponses(setPollResponses, setLoadingPollResponses)
-      }, [])
+  const [loadingPollResponses, setLoadingPollResponses] = useState(false);
 
+  // local draft of response (editing mode)
   const [pendingResponseDetails, setPendingResponseDetails] = useState<PendingResponseDetails>({
     willComeIfAtLeast: 0,
     willBring: 1,
-    weather: 1,
-  })
+    weather: 50,
+  });
+
+  // once submitted, backend is source of truth
+  const [submittedResponse, setSubmittedResponse] = useState<PollResponse | undefined>();
+
+  // On first render, load poll responses.
+  useEffect(() => {
+    loadPollResponses(setPollResponses, setLoadingPollResponses);
+  }, []);
+
+  // When poll responses changes, update submitted response.
+  useEffect(() => {
+    const foundResponse = pollResponses.find(response => response.userName === userName)
+    if (foundResponse){
+      setSubmittedResponse(foundResponse)
+    }
+  }, pollResponses)
 
   return (
     <div style={{textAlign: 'center'}}>
@@ -61,9 +73,31 @@ function App() {
           existingName={userName}
           />
       </header>
-      <div style={styles.appHeader}>
-        {userName && <ResponseFlow/>}
-      </div>
+
+      <main style={styles.pageContainer}>
+        {userName && (
+          <ResponseDetails
+            userName={userName}
+            pending={pendingResponseDetails}
+            onChangePending={setPendingResponseDetails}
+            submitted={submittedResponse}
+            onSubmit={async () => {
+              // TODO: send to backend (make sure to await, so the load will see our edits)
+              setSubmittedResponse({
+                userName: userName,
+                weather: pendingResponseDetails.weather,
+                willBring: pendingResponseDetails.willBring,
+                willComeIfAtLeast: pendingResponseDetails.willComeIfAtLeast
+              })
+              // This re-load will trigger another setSubmittedResponse because of 
+              // the useEffect watching for changes in pollResponses.
+              // That's ok.
+              await loadPollResponses(setPollResponses, setLoadingPollResponses);
+              
+            }}
+          />
+        )}
+      </main>
     </div>
   );
 }
@@ -79,5 +113,8 @@ const styles: {[key: string]: CSSProperties} = {
     alignItems: 'center',
     justifyContent: 'center',
     color: 'white',
+  },
+  pageContainer: {
+    marginTop: '2rem',
   }
-}
+};

@@ -1,7 +1,10 @@
+// TODO: Rename this file "Backend" or "DAO" or something.
+
 export interface PollResponse {
     userName: string,
     willComeIfAtLeast: number,
     willBring: number,
+    weather: number,
 }
 
 // - I need to update the backend to key off name not name,ID.
