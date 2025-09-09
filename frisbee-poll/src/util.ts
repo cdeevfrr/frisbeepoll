@@ -24,8 +24,15 @@ export function computeComing(pollResponses: Array<PollResponse>, weather: numbe
      * 
      */
 
-    // First, compute the largest number of joining players.
-    const constraintNumbers = pollResponses.filter(x => x.weather >= weather).map(x => x.willComeIfAtLeast).sort()
+    // First, compute the largest number of joining players, see algorithm above.
+    const constraintNumbers: number[] = [];
+    pollResponses.filter(x => x.weather >= weather).forEach(response => {
+        for (let i = 0; i < response.willBring; i++){
+            constraintNumbers.push(response.willComeIfAtLeast)
+        }
+    })
+    constraintNumbers.sort()
+
     let joiningPlayers = 0
     for (let i = 0; i < constraintNumbers.length; i++){
         if (constraintNumbers[i] <= i + 1) {// If index 0 has a value of 1 or less, that player is going.

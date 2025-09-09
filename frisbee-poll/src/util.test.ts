@@ -184,3 +184,20 @@ test('computeComing works for a big edge case', () => {
         "p6": false,
     })
 });
+
+test('computeComing respects bringing extra players', () => {
+    const computed = computeComing([{
+        userName: "danny",
+        weather: 100,
+        willBring: 2,
+        willComeIfAtLeast: 0
+    },{
+        userName: "bob",
+        ...allWeather,
+        willComeIfAtLeast: 3
+    },], 50)
+    expect(computed).toEqual({
+        "danny": true,
+        "bob": true,
+    })
+});
