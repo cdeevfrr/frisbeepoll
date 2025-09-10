@@ -49,7 +49,13 @@ function App() {
             Cookies.set("userName", name, {expires: 180})
             setSubmittedResponse(undefined)
             setUserName(name)
-            await reloadPollResponses({setPollResponses, setLoadingPollResponses, setSubmittedResponse, userName: name})
+            try{
+              await reloadPollResponses({setPollResponses, setLoadingPollResponses, setSubmittedResponse, userName: name})
+            } catch (err) {
+              console.log(JSON.stringify(err))
+              // TODO: make it clear to the user that an error happened.
+              setLoadingPollResponses(false)
+            }
           }} 
           existingName={userName}
         />
@@ -64,18 +70,24 @@ function App() {
               onChangePending={setPendingResponseDetails}
               submitted={submittedResponse}
               onSubmit={async () => {  
-                setLoadingPollResponses(true)      
-                await submitResponse({
-                  response: { 
-                    userName: userName,
-                    weather: pendingResponseDetails.weather,
-                    willBring: pendingResponseDetails.extras + 1,
-                    willComeIfAtLeast: pendingResponseDetails.willComeIfAtLeast,
-                  },
-                  sourceID: "Unused",
-                })      
-                // This will eventually set loadingPollResponses(false)
-                await reloadPollResponses({setPollResponses, setLoadingPollResponses, setSubmittedResponse, userName});
+                setLoadingPollResponses(true)   
+                try{
+                  await submitResponse({
+                    response: { 
+                      userName: userName,
+                      weather: pendingResponseDetails.weather,
+                      willBring: pendingResponseDetails.extras + 1,
+                      willComeIfAtLeast: pendingResponseDetails.willComeIfAtLeast,
+                    },
+                    sourceID: "Unused",
+                  })      
+                  // This will eventually set loadingPollResponses(false)
+                  await reloadPollResponses({setPollResponses, setLoadingPollResponses, setSubmittedResponse, userName});
+                } catch (err) {
+                  console.log(JSON.stringify(err))
+                  // TODO: make it clear to the user that an error happened.
+                  setLoadingPollResponses(false)
+                }
               }}
             />}
           </div>
