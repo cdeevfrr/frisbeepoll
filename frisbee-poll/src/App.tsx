@@ -15,6 +15,7 @@ function App() {
   const [userName, setUserName] = useState<string | undefined>(Cookies.get("userName"));
   const [pollResponses, setPollResponses] = useState<Array<PollResponse>>([]);
   const [loadingPollResponses, setLoadingPollResponses] = useState(false);
+  const [toasts, setToasts] = useState<string[]>([]);
 
   // local draft of response (editing mode)
   const [pendingResponseDetails, setPendingResponseDetails] = useState<PendingResponseDetails>({
@@ -26,9 +27,25 @@ function App() {
   // once submitted, backend is source of truth
   const [submittedResponse, setSubmittedResponse] = useState<PollResponse | undefined>();
 
+  function pushToast(msg: string) {
+    setToasts((prev) => [ ...prev, msg]);
+    setTimeout(() => {
+      // After n seconds, toasts array will now look like [...prev, msg, new]
+      // and since each member of ...prev removes itself, we now need to remove
+      // from index 0 (not pop from the end of the array)
+      setToasts((prev) => prev.slice(1));
+    }, 6000); // auto dismiss after 6s
+  }
+
+  function handleErr(err: any) {
+      console.error(err);
+      pushToast("Something went wrong - please refresh the page");
+      setLoadingPollResponses(false);
+  }
+
   // On first render, load poll responses.
   useEffect(() => {
-    reloadPollResponses({setPollResponses, setLoadingPollResponses, setSubmittedResponse, userName});
+    reloadPollResponses({setPollResponses, setLoadingPollResponses, setSubmittedResponse, userName}).catch(handleErr)
   }, []);
 
   return (
@@ -37,7 +54,7 @@ function App() {
         <div style={styles.headerTop}>
           <PollResponses pollResponses={pollResponses}/>
           <button 
-            onClick={() => reloadPollResponses({setPollResponses, setLoadingPollResponses, setSubmittedResponse, userName})}
+            onClick={() => reloadPollResponses({setPollResponses, setLoadingPollResponses, setSubmittedResponse, userName}).catch(handleErr)}
             disabled={loadingPollResponses}
             style={styles.button}
           >
@@ -52,9 +69,7 @@ function App() {
             try{
               await reloadPollResponses({setPollResponses, setLoadingPollResponses, setSubmittedResponse, userName: name})
             } catch (err) {
-              console.log(JSON.stringify(err))
-              // TODO: make it clear to the user that an error happened.
-              setLoadingPollResponses(false)
+              handleErr(err)
             }
           }} 
           existingName={userName}
@@ -84,15 +99,20 @@ function App() {
                   // This will eventually set loadingPollResponses(false)
                   await reloadPollResponses({setPollResponses, setLoadingPollResponses, setSubmittedResponse, userName});
                 } catch (err) {
-                  console.log(JSON.stringify(err))
-                  // TODO: make it clear to the user that an error happened.
-                  setLoadingPollResponses(false)
+                  handleErr(err)
                 }
               }}
             />}
           </div>
         )}
       </main>
+
+      {/* Toasts, usually invisible */}
+      <div style={styles.toastContainer}>
+        {toasts.map((msg, i) => (
+          <div key={i} style={styles.toast}>{msg}</div>
+        ))}
+      </div>
     </div>
   );
 }
@@ -178,5 +198,24 @@ const styles: {[key: string]: CSSProperties} = {
     fontSize: '0.9rem',
     cursor: 'pointer',
     transition: 'background-color 0.2s ease',
-  }
+  },
+  toastContainer: { 
+    position: 'fixed', 
+    bottom: '1rem', 
+    left: '50%', 
+    transform: 'translateX(-50%)', 
+    display: 'flex', 
+    flexDirection: 'column', 
+    gap: '0.5rem', 
+    zIndex: 1000 },
+  toast: { 
+    background: '#ef4444', 
+    color: 'white', 
+    padding: '0.75rem 1rem', 
+    borderRadius: '8px', 
+    boxShadow: '0 2px 6px rgba(0,0,0,0.15)', 
+    fontSize: '0.9rem', 
+    maxWidth: '80%', 
+    textAlign: 'center' 
+  },
 };
