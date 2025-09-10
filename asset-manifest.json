@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/frisbeepoll/static/css/main.e6c13ad2.css",
-    "main.js": "/frisbeepoll/static/js/main.c929fdbe.js",
+    "main.js": "/frisbeepoll/static/js/main.ea73c355.js",
     "static/js/453.cb33ad2a.chunk.js": "/frisbeepoll/static/js/453.cb33ad2a.chunk.js",
     "index.html": "/frisbeepoll/index.html",
     "main.e6c13ad2.css.map": "/frisbeepoll/static/css/main.e6c13ad2.css.map",
-    "main.c929fdbe.js.map": "/frisbeepoll/static/js/main.c929fdbe.js.map",
+    "main.ea73c355.js.map": "/frisbeepoll/static/js/main.ea73c355.js.map",
     "453.cb33ad2a.chunk.js.map": "/frisbeepoll/static/js/453.cb33ad2a.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.c929fdbe.js"
+    "static/js/main.ea73c355.js"
   ]
 }
