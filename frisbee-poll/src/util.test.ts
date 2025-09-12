@@ -201,3 +201,34 @@ test('computeComing respects bringing extra players', () => {
         "bob": true,
     })
 });
+
+test('Actual issue: github issue #6', () => {
+    // ChatGPT found that this bug was due to an array being sorted
+    // lexographical not numerically. So keep this test around.
+    const computed = computeComing([{
+        userName: "danny",
+        weather: 100,
+        willBring: 1,
+        willComeIfAtLeast: 0
+    },{
+        userName: "bob",
+        ...allWeather,
+        willComeIfAtLeast: 10,
+    },{
+        userName: "alice",
+        weather: 100,
+        willBring: 2,
+        willComeIfAtLeast: 10,
+    },{
+        userName: "luke",
+        weather: 100,
+        willBring: 1,
+        willComeIfAtLeast: 3,
+    }], 50)
+    expect(computed).toEqual({
+        "danny": true,
+        "luke": false,
+        "alice": false,
+        "bob": false,
+    })
+});

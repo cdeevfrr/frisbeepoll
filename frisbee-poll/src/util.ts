@@ -31,7 +31,7 @@ export function computeComing(pollResponses: Array<PollResponse>, weather: numbe
             constraintNumbers.push(response.willComeIfAtLeast)
         }
     })
-    constraintNumbers.sort()
+    constraintNumbers.sort((a, b) => a-b)
 
     let joiningPlayers = 0
     for (let i = 0; i < constraintNumbers.length; i++){
