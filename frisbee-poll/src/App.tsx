@@ -19,7 +19,7 @@ function App() {
 
   // local draft of response (editing mode)
   const [pendingResponseDetails, setPendingResponseDetails] = useState<PendingResponseDetails>({
-    willComeIfAtLeast: 0,
+    willComeIfAtLeast: 6,
     extras: 0,
     weather: 50,
   });
