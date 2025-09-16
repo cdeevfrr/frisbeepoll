@@ -25,10 +25,10 @@ export function ResponseDetails({
         <h2>{userName}, you’ve responded:</h2>
         <ul>
           <li>
-            I’ll come if at least{" "}
-            {submitted.willComeIfAtLeast === 0
-              ? "anyone is going"
-              : `${submitted.willComeIfAtLeast} people are going`}
+            I’ll join{" "}
+            {submitted.willComeIfAtLeast <= 1
+              ? "no matter how many people are going"
+              : `if at least ${submitted.willComeIfAtLeast} people are going`}
           </li>
           <li>I’ll bring {submitted.willBring - 1} extra players</li>
           {weatherff && <li>
@@ -45,7 +45,7 @@ export function ResponseDetails({
       <h2>Hi {userName}, fill in your response</h2>
 
       <label>
-        I’ll come if at least{" "}
+        I’ll join if at least{" "}
         <input
           type="text"
           inputMode="numeric"
@@ -58,9 +58,9 @@ export function ResponseDetails({
             });
           }}
         />{" "}
-        people are going
+        people, including me, are going
         <small style={{ display: "block", color: "#666" }}>
-          Enter 0 if you’ll come no matter what
+          Enter 1 if you’ll come no matter what
         </small>
       </label>
 
